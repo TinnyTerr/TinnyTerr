@@ -111,8 +111,6 @@ function __generate_ps1 {
 export -f __generate_ps1
 export PROMPT_COMMAND='__generate_ps1';
 
-source ~/01-custom
-
 # NVM setup
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
