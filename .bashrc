@@ -2,7 +2,8 @@
 
 alias myip="ifconfig | sed -En 's/.*inet (addr:)?(192\.168\.[0-9]+\.[0-9]+).*/\2/p'"
 
-oh-my-posh
+# Remove the output while still checking for the directory/installation
+test -d .cache/oh-my-posh/
 returned=$?
 if [ $returned -ne 0 ]; then
   export PROMPT_COMMAND='PS1_CMD1=$(tty); PS1_CMD2=$(myip)'; 
