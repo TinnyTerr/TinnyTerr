@@ -2,7 +2,7 @@
 
 # Motd generator for Linux terminal using bash
 
-apt install figlet -qqq
+sudo apt install figlet -qqq
 
 # Get hostname
 hostname=$(hostname)
