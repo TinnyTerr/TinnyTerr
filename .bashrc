@@ -21,7 +21,7 @@ export NVM_DIR="$HOME/.nvm"
 
 which figlet
 returned=$?
-if [ $returned -e 0 ]; then
+if [ $returned -eq 0 ]; then
   hostname=$(hostname)
   title=$(figlet -f standard $hostname)
 fi
