@@ -19,7 +19,7 @@ export NVM_DIR="$HOME/.nvm"
 
 # Now motd
 
-which figlet
+which figlet > /dev/null
 returned=$?
 if [ $returned -eq 0 ]; then
   hostname=$(hostname)
