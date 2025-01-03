@@ -1,15 +1,21 @@
 #!/bin/bash
 
 alias myip="ifconfig | sed -En 's/.*inet (addr:)?(192\.168\.[0-9]+\.[0-9]+).*/\2/p'"
+which eza > /dev/null
+returned=$?
+if [ $returned -eq 0 ]; then
+	alias "la"="eza -Als type"
+	alias ls="eza -Als type -I '.*'"
+fi
 
 # Check if oh-my-posh is installed in the correct place. If not, use a preset PS1
 test -d $HOME/.cache/oh-my-posh/
 returned=$?
 if [ $returned -ne 0 ]; then
-  export PROMPT_COMMAND='PS1_CMD1=$(tty); PS1_CMD2=$(myip)'; 
-  export PS1='\[\e[90m\][\!]\[\e[0m\] \[\e[36m\]\T\[\e[0m\] \[\e[36m\]\d\[\e[0m\] \[\e[90m\][\[\e[38;5;32m\]\u@\H\[\e[90m\]:\[\e[0m\]${PS1_CMD1} \[\e[38;5;47m\]${PS1_CMD2}\[\e[90m\]]\[\e[0m\] \w\n\$ '
+	export PROMPT_COMMAND='PS1_CMD1=$(tty); PS1_CMD2=$(myip)'; 
+	export PS1='\[\e[90m\][\!]\[\e[0m\] \[\e[36m\]\T\[\e[0m\] \[\e[36m\]\d\[\e[0m\] \[\e[90m\][\[\e[38;5;32m\]\u@\H\[\e[90m\]:\[\e[0m\]${PS1_CMD1} \[\e[38;5;47m\]${PS1_CMD2}\[\e[90m\]]\[\e[0m\] \w\n\$ '
 else 
-  eval "$(oh-my-posh init bash --config $HOME/.cache/oh-my-posh/themes/atomic.omp.json)"
+	eval "$(oh-my-posh init bash --config $HOME/.cache/oh-my-posh/themes/atomic.omp.json)"
 fi
 
 # NVM setup
@@ -22,8 +28,8 @@ export NVM_DIR="$HOME/.nvm"
 which figlet > /dev/null
 returned=$?
 if [ $returned -eq 0 ]; then
-  hostname=$(hostname)
-  title=$(figlet -f standard $hostname)
+	hostname=$(hostname)
+	title=$(figlet -f standard $hostname)
 fi
 
 # CPU usage
