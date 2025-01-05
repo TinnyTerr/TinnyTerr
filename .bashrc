@@ -39,9 +39,6 @@ cpu_usage=$(top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk
 memory_usage=$(free -m | awk '/^Mem/{printf("%.2f%%", $3/$2*100.0)}')
 
 # External IP
-external_ip=$(curl -s https://api.ipify.org)
-
-# External IP
 user=$(whoami)
 
 # Colouring
@@ -55,7 +52,6 @@ echo -e "${title}"
 echo -e "${CYAN}-----------------------------------------------------------${NC}"
 echo -e "${CYAN} CPU usage:${NC} $cpu_usage"
 echo -e "${CYAN} Memory usage:${NC} $memory_usage"
-echo -e "${CYAN} External IP:${NC} $external_ip"
 echo -e "${CYAN} System Boot:${NC} $(uptime -s) ($(uptime -p))"
 echo -e "${CYAN} Users logged in:${NC} $(who | wc -l)"
 echo -e "${CYAN} Welcome${NC} $user${CYAN}! "
