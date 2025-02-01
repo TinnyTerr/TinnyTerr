@@ -4,7 +4,7 @@ alias myip="ifconfig | sed -En 's/.*inet (addr:)?(192\.168\.[0-9]+\.[0-9]+).*/\2
 which eza > /dev/null
 returned=$?
 if [ $returned -eq 0 ]; then
-	alias "la"="eza -Als type"
+	alias la="eza -Als type --git -T --hyperlink --header -L 2 -I node_modules"
 	alias ls="eza -Als type -I '.*'"
 fi
 
