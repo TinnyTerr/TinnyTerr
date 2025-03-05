@@ -9,9 +9,10 @@ Hi! I'm a developer passionate about automation, coding, and optimizing workflow
 
 ## My Projects
 
-Currently, trying to beef up my portfolio however only got the one:
-
 ### [Logmatic](https://github.com/tinnyterr/logmatic)
 **Description**: A simple and powerful logger for both commonjs and es6 standards. 
+
+### [tinnyterr-cdn.uk](https://github.com/tinnyterr/tinnyterr-cdn.uk)
+**Description**: A filehoster and texthoster with authentication incuded.
 
 ## Thanks for visiting! 😄
