@@ -1,5 +1,3 @@
-#!/usr/bin/env
-
 ########################################
 # Bash Options
 ########################################
@@ -55,7 +53,7 @@ alias gb='git branch'
 # eza instead of ls (if available)
 if command -v eza >/dev/null; then
     alias la="eza -Als type --git -T --hyperlink --header -L 2 -I node_modules"
-    alias ls="eza -Als type -I '.*'"
+    alias ls="eza -Als type -I"
 fi
 
 ########################################
@@ -148,3 +146,4 @@ echo
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+. "/root/.deno/env"
