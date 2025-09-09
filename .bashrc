@@ -53,13 +53,44 @@ alias gb='git branch'
 # eza instead of ls (if available)
 if command -v eza >/dev/null; then
     alias la="eza -Als type --git -T --hyperlink --header -L 2 -I node_modules"
-    alias ls="eza -Als type -I"
+    alias ls="eza -Als type"
 fi
 
 ########################################
 # Functions
 ########################################
-myip() {
+externalip() {
+    tmpdir=$HOME/.local/share/temp/extip
+
+    if [ -d $HOME/.local/share/temp/extip ]; then
+        interfaces=$(ip -o link show | awk -F': ' '{print $2}' | grep -v lo)
+        cat "$tmpdir"/*.out | grep -v "Failed" | sort
+
+        for iface in $interfaces; do
+            {
+                ip=$(curl --silent --max-time 5 --interface "$iface" icanhazip.com || echo "Failed")
+                echo "$ip" > "$tmpdir/$iface.out"
+            } &> /dev/null &
+        done
+    else
+        mkdir -p $tmpdir > /dev/null
+        interfaces=$(ip -o link show | awk -F': ' '{print $2}' | grep -v lo)
+
+        set +m
+
+        for iface in $interfaces; do
+            {
+                ip=$(curl --silent --max-time 5 --interface "$iface" icanhazip.com || echo "Failed")
+                echo "$ip" > "$tmpdir/$iface.out"
+            } &> /dev/null &
+        done
+
+        wait
+
+        cat "$tmpdir"/*.out | grep -v "Failed" | sort
+    fi
+}
+localip() {
     ip addr show |
     awk '/inet / && $2 !~ /^127\./ {print $2}' |
     cut -d/ -f1 |
@@ -67,6 +98,7 @@ myip() {
     ip addr show |
     awk '/inet / && $2 !~ /^127\./ {print $2}' |
     cut -d/ -f1
+
 }
 mkcd() { mkdir -p "$1" && cd "$1" || return; }
 extract() {
@@ -118,7 +150,7 @@ __git_complete gb _git_branch
 if [ -d "$HOME/.cache/oh-my-posh/" ]; then
     eval "$(oh-my-posh init bash --config "$HOME/.cache/oh-my-posh/themes/catppuccin_mocha.omp.json")"
 else
-    export PROMPT_COMMAND='PS1_CMD1=$(tty); PS1_CMD2=$(myip)'
+    export PROMPT_COMMAND='PS1_CMD1=$(tty); PS1_CMD2=$(localip)'
     export PS1='\[\e[90m\][\!]\[\e[0m\] \[\e[36m\]\T\[\e[0m\] \[\e[36m\]\d\[\e[0m\] \[\e[90m\][\[\e[38;5;32m\]\u@\H\[\e[90m\]:\[\e[0m\]${PS1_CMD1} \[\e[38;5;47m\]${PS1_CMD2}\[\e[90m\]]\[\e[0m\] \w\n\$ '
 fi
 
@@ -141,9 +173,9 @@ clear
 echo -e "\e[1;36m$title\e[0m"
 echo -e "\e[33mUptime:\e[0m $(uptime -p)"
 echo -e "\e[33mMemory:\e[0m $(free -h | awk '/^Mem:/ {print $3 "/" $2}')"
-echo -e "\e[33mLocal IP(s):\n\e[0m$(myip)"
+echo -e "\e[33mLocal IP(s):\n\e[0m$(localip)"
+echo -e "\e[33mExternal IP(s): \n\e[0m$(externalip)"
 echo
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-. "/root/.deno/env"
