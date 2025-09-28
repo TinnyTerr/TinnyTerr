@@ -148,7 +148,7 @@ __git_complete gb _git_branch
 # Prompt
 ########################################
 if [ -d "$HOME/.cache/oh-my-posh/" ]; then
-    eval "$(oh-my-posh init bash --config "$HOME/.cache/oh-my-posh/themes/catppuccin_mocha.omp.json")"
+    eval "$(oh-my-posh init bash --config "$HOME/.cache/oh-my-posh/themes/catppuccin.omp.json")"
 else
     export PROMPT_COMMAND='PS1_CMD1=$(tty); PS1_CMD2=$(localip)'
     export PS1='\[\e[90m\][\!]\[\e[0m\] \[\e[36m\]\T\[\e[0m\] \[\e[36m\]\d\[\e[0m\] \[\e[90m\][\[\e[38;5;32m\]\u@\H\[\e[90m\]:\[\e[0m\]${PS1_CMD1} \[\e[38;5;47m\]${PS1_CMD2}\[\e[90m\]]\[\e[0m\] \w\n\$ '
