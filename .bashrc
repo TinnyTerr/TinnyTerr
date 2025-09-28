@@ -94,12 +94,9 @@ localip() {
     ip addr show |
     awk '/inet / && $2 !~ /^127\./ {print $2}' |
     cut -d/ -f1 |
-    grep -E '^(10\.|192\.168\.|172\.(1[6-9]|2[0-9]|3[0-1])\.)' ||
-    ip addr show |
-    awk '/inet / && $2 !~ /^127\./ {print $2}' |
-    cut -d/ -f1
-
+    { grep -E '^192\.' || grep -E '^(10\.|172\.(1[6-9]|2[0-9]|3[0-1])\.)'; }
 }
+
 mkcd() { mkdir -p "$1" && cd "$1" || return; }
 extract() {
     if [ -z "$1" ]; then
