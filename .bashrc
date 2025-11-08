@@ -18,9 +18,9 @@ curl -sSL "$REMOTE_URL" -o "$TMP_FILE"
 
 if [ ! -f "$LOCAL_FILE" ] || ! cmp -s "$TMP_FILE" "$LOCAL_FILE"; then
     echo "Updating remote bashrc snippet..."
-    mv "$TMP_FILE" "$LOCAL_FILE"
+    mv "$TMP_FILE" "$LOCAL_FILE" -y
 else
-    rm "$TMP_FILE"
+    rm "$TMP_FILE" -f
 fi
 
 [ -f "$LOCAL_FILE" ] && source "$LOCAL_FILE"
