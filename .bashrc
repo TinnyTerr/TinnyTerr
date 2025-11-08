@@ -1,8 +1,31 @@
+# Not interactive, end early.
+[[ $- == *i* ]] || return
+
 ########################################
 # Bash Options
 ########################################
 shopt -s cdspell dirspell           # Correct minor cd/dir typos
 shopt -s histappend                 # Append to history, don't overwrite
+
+########################################
+# Auto-update file
+########################################
+REMOTE_URL="https://raw.githubusercontent.com/TinnyTerr/TinnyTerr/refs/heads/main/.bashrc"
+LOCAL_FILE="$HOME/.bashrc"
+
+TMP_FILE=$(mktemp)
+curl -sSL "$REMOTE_URL" -o "$TMP_FILE"
+
+if [ ! -f "$LOCAL_FILE" ] || ! cmp -s "$TMP_FILE" "$LOCAL_FILE"; then
+    echo "Updating remote bashrc snippet..."
+    mv "$TMP_FILE" "$LOCAL_FILE"
+else
+    rm "$TMP_FILE"
+fi
+
+[ -f "$LOCAL_FILE" ] && source "$LOCAL_FILE"
+
+
 
 ########################################
 # History Configuration
@@ -23,12 +46,12 @@ bind '"\C-W": backward-delete-word'
 # Path additions
 ########################################
 
-# Node
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
-# Local
+. "/home/lm/.deno/env"
+
 export PATH="$HOME/.local/bin:"$PATH
 ########################################
 # Aliases
@@ -94,9 +117,12 @@ localip() {
     ip addr show |
     awk '/inet / && $2 !~ /^127\./ {print $2}' |
     cut -d/ -f1 |
-    { grep -E '^192\.' || grep -E '^(10\.|172\.(1[6-9]|2[0-9]|3[0-1])\.)'; }
-}
+    grep -E '^(10\.|192\.168\.|172\.(1[6-9]|2[0-9]|3[0-1])\.)' ||
+    ip addr show |
+    awk '/inet / && $2 !~ /^127\./ {print $2}' |
+    cut -d/ -f1
 
+}
 mkcd() { mkdir -p "$1" && cd "$1" || return; }
 extract() {
     if [ -z "$1" ]; then
@@ -173,6 +199,3 @@ echo -e "\e[33mMemory:\e[0m $(free -h | awk '/^Mem:/ {print $3 "/" $2}')"
 echo -e "\e[33mLocal IP(s):\n\e[0m$(localip)"
 echo -e "\e[33mExternal IP(s): \n\e[0m$(externalip)"
 echo
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
