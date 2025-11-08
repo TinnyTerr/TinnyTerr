@@ -8,26 +8,6 @@ shopt -s cdspell dirspell           # Correct minor cd/dir typos
 shopt -s histappend                 # Append to history, don't overwrite
 
 ########################################
-# Auto-update file
-########################################
-REMOTE_URL="https://raw.githubusercontent.com/TinnyTerr/TinnyTerr/refs/heads/main/.bashrc"
-LOCAL_FILE="$HOME/.bashrc"
-
-TMP_FILE=$(mktemp)
-curl -sSL "$REMOTE_URL" -o "$TMP_FILE"
-
-if [ ! -f "$LOCAL_FILE" ] || ! cmp -s "$TMP_FILE" "$LOCAL_FILE"; then
-    echo "Updating remote bashrc snippet..."
-    mv "$TMP_FILE" "$LOCAL_FILE" -y
-else
-    rm "$TMP_FILE" -f
-fi
-
-[ -f "$LOCAL_FILE" ] && source "$LOCAL_FILE"
-
-
-
-########################################
 # History Configuration
 ########################################
 export HISTSIZE=10000
