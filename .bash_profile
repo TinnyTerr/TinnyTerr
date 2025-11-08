@@ -11,6 +11,8 @@ if [ ! -d "$LOCAL_REPO" ]; then
     git clone -b "$BRANCH" "$REMOTE_REPO" "$LOCAL_REPO"
 fi
 
+prev=$(pwd)
+
 cd "$LOCAL_REPO" || return
 
 # Check for remote updates without changing local files
@@ -25,4 +27,4 @@ fi
 
 [ -f "$LOCAL_REPO/$FILE_TO_SOURCE" ] && source "$LOCAL_REPO/$FILE_TO_SOURCE"
 
-cd ~
+cd $prev
