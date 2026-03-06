@@ -33,6 +33,7 @@ export NVM_DIR="$HOME/.nvm"
 . "/home/lm/.deno/env"
 
 export PATH="$HOME/.local/bin:"$PATH
+export PATH="$HOME/.local/*/bin:"$PATH
 ########################################
 # Aliases
 ########################################
