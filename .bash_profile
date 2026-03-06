@@ -6,6 +6,8 @@ REMOTE_REPO="https://github.com/TinnyTerr/TinnyTerr.git"
 BRANCH="main"
 FILE_TO_SOURCE=".bashrc"
 
+dir=$(pwd)
+
 # Clone repo if it doesn't exist
 if [ ! -d "$LOCAL_REPO" ]; then
     git clone -b "$BRANCH" "$REMOTE_REPO" "$LOCAL_REPO"
@@ -24,6 +26,8 @@ if [ "$LOCAL_HASH" != "$REMOTE_HASH" ]; then
     echo "Updating bashrc snippet from remote..."
     git reset --hard "origin/$BRANCH" >/dev/null 2>&1
 fi
+
+cd $dir
 
 [ -f "$LOCAL_REPO/$FILE_TO_SOURCE" ] && source "$LOCAL_REPO/$FILE_TO_SOURCE"
 
