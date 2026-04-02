@@ -31,6 +31,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
 . $HOME/.deno/env
+eval "$(zoxide init bash)"
 
 export PATH="$HOME/.local/bin:"$PATH
 export PATH="$HOME/.local/*/bin:"$PATH
