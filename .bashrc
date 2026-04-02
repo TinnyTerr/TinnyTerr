@@ -32,6 +32,7 @@ export NVM_DIR="$HOME/.nvm"
 
 . $HOME/.deno/env
 eval "$(zoxide init bash)"
+eval "$(fzf --bash)"
 
 export PATH="$HOME/.local/bin:"$PATH
 export PATH="$HOME/.local/*/bin:"$PATH
