@@ -1,6 +1,20 @@
 # Not interactive, end early.
 [[ $- == *i* ]] || return
 
+# Save last directory on exit
+trap 'pwd > ~/.lastdir' EXIT
+
+# On startup, prompt user
+if [ -f ~/.lastdir ]; then
+  lastdir="$(cat ~/.lastdir)"
+  if [ -d "$lastdir" ] && [ "$lastdir" != "$HOME" ]; then
+    read -p "Restore last directory ($lastdir)? [y/N] " answer
+    case "$answer" in
+      [yY]* ) cd "$lastdir" ;;
+    esac
+  fi
+fi
+
 ########################################
 # Bash Options
 ########################################
