@@ -8,12 +8,15 @@ FILE_TO_SOURCE=".bashrc"
 
 dir=$(pwd)
 
+# Save last directory on exit
+trap 'pwd > ~/.lastdir' EXIT
+
 # Clone repo if it doesn't exist
 if [ ! -d "$LOCAL_REPO" ]; then
     git clone -b "$BRANCH" "$REMOTE_REPO" "$LOCAL_REPO"
 fi
 
-prev=$(pwd)
+
 
 cd "$LOCAL_REPO" || return
 
@@ -27,8 +30,18 @@ if [ "$LOCAL_HASH" != "$REMOTE_HASH" ]; then
     git reset --hard "origin/$BRANCH" >/dev/null 2>&1
 fi
 
-cd $dir
-
 [ -f "$LOCAL_REPO/$FILE_TO_SOURCE" ] && source "$LOCAL_REPO/$FILE_TO_SOURCE"
 
-cd $prev
+cd $dir
+
+# On startup, prompt user
+if [ -f ~/.lastdir ]; then
+  lastdir="$(cat ~/.lastdir)"
+  if [ -d "$lastdir" ] && [ "$lastdir" != "$HOME" ]; then
+    read -p "Restore last directory ($lastdir)? [y/N] " answer
+    case "$answer" in
+      [yY]* ) cd "$lastdir" ;;
+    esac
+  fi
+fi
+
