@@ -37,6 +37,7 @@ eval "$(fzf --bash)"
 
 export PATH="$HOME/.local/bin:"$PATH
 export PATH="$HOME/.local/*/bin:"$PATH
+export PATH="$HOME/.bun/bin:$PATH"
 ########################################
 # Aliases
 ########################################
