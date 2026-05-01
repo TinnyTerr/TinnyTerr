@@ -32,8 +32,8 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
 . $HOME/.deno/env
-eval "$(zoxide init bash)"
-eval "$(fzf --bash)"
+command -v zoxide >/dev/null && eval "$(zoxide init bash)"
+command -v fzf >/dev/null && eval "$(fzf --bash)"
 
 export PATH="$HOME/.local/bin:"$PATH
 export PATH="$HOME/.local/*/bin:"$PATH
@@ -165,4 +165,4 @@ fi
 ########################################
 # Message of the Day (MOTD)
 ########################################
-fastfetch --config "$LOCAL_REPO/fastfetch.jsonc"
+command -v fastfetch >/dev/null && fastfetch --config "$LOCAL_REPO/fastfetch.jsonc"
