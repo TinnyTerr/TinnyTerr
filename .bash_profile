@@ -1,7 +1,7 @@
 # Not interactive, end early.
 [[ $- == *i* ]] || return
 
-LOCAL_REPO="$HOME/.local/share/bashrc_repo"
+export LOCAL_REPO="$HOME/.local/share/bashrc_repo"
 REMOTE_REPO="https://github.com/TinnyTerr/TinnyTerr.git"
 BRANCH="main"
 FILE_TO_SOURCE=".bashrc"
