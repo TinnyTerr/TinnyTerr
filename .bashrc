@@ -165,22 +165,4 @@ fi
 ########################################
 # Message of the Day (MOTD)
 ########################################
-if command -v hostname >/dev/null; then
-    host_name=$(hostname)
-else
-    host_name=$(cat /etc/hostname)
-fi
-
-if command -v figlet >/dev/null && figlet -f standard "$host_name" >/dev/null 2>&1; then
-    title=$(figlet -f standard "$host_name")
-else
-    title="*** $host_name ***"
-fi
-
-clear
-echo -e "\e[1;36m$title\e[0m"
-echo -e "\e[33mUptime:\e[0m $(uptime -p)"
-echo -e "\e[33mMemory:\e[0m $(free -h | awk '/^Mem:/ {print $3 "/" $2}')"
-echo -e "\e[33mLocal IP(s):\n\e[0m$(localip)"
-echo -e "\e[33mExternal IP(s): \n\e[0m$(externalip)"
-echo
+fastfetch --config "$LOCAL_REPO/fastfetch.jsonc"
