@@ -165,4 +165,5 @@ fi
 ########################################
 # Message of the Day (MOTD)
 ########################################
+clear
 command -v fastfetch >/dev/null && fastfetch --config "$LOCAL_REPO/fastfetch.jsonc"
