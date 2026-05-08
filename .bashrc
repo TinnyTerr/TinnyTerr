@@ -46,7 +46,7 @@ command -v fzf >/dev/null && eval "$(fzf --bash)"
 for dir in "$HOME"/.local/*/bin; do
   [ -d "$dir" ] && export PATH="$dir:$PATH"
 done
-export PATH="$HOME/.bun/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
 ########################################
 # Aliases
 ########################################
