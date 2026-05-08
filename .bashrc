@@ -89,7 +89,8 @@ externalip() {
     local tmpdir interfaces ip iface
     local tmpdir="$HOME/.local/share/temp/extip"
     if [ -d "$tmpdir" ]; then
-    mkdir -p "$tmpdir"
+        mkdir -p "$tmpdir"
+    fi
     local interfaces
     interfaces=$(ip -o link show | awk -F': ' '{print $2}' | grep -v lo)
 
