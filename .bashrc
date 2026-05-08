@@ -47,6 +47,7 @@ for dir in "$HOME"/.local/*/bin; do
   [ -d "$dir" ] && export PATH="$dir:$PATH"
 done
 export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.bun/bin:$PATH"
 ########################################
 # Aliases
 ########################################
