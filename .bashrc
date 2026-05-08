@@ -25,18 +25,27 @@ bind '"\C-W": backward-delete-word'
 # Path additions
 ########################################
 
+# Lazy load NVM — only initialises when you first call nvm/node/npm
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+_nvm_lazy() {
+    unset -f nvm node npm npx
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+    "$@"
+}
+nvm()  { _nvm_lazy nvm "$@"; }
+node() { _nvm_lazy node "$@"; }
+npm()  { _nvm_lazy npm "$@"; }
+npx()  { _nvm_lazy npx "$@"; }
 
 [ -f "$HOME/.deno/env" ] && . "$HOME/.deno/env"
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 command -v zoxide >/dev/null && eval "$(zoxide init bash)"
 command -v fzf >/dev/null && eval "$(fzf --bash)"
 
 for dir in "$HOME"/.local/*/bin; do
   [ -d "$dir" ] && export PATH="$dir:$PATH"
 done
-export PATH="$HOME/.local/*/bin:"$PATH
 export PATH="$HOME/.bun/bin:$PATH"
 ########################################
 # Aliases
@@ -63,46 +72,39 @@ alias gb='git branch'
 alias br='bun run'
 alias bi='bun install'
 alias bx='bunx'
+alias gst='git stash'
+alias gstp='git stash pop'
+alias here='${EDITOR:-code} .'
 
 # eza instead of ls (if available)
 if command -v eza >/dev/null; then
     alias la="eza -Als type --git -T --hyperlink --header -L 2 -I node_modules"
-    alias ls="eza -Als type"
+    alias ls="eza -Als type --group-directories-first --icons"
 fi
 
 ########################################
 # Functions
 ########################################
 externalip() {
-    tmpdir=$HOME/.local/share/temp/extip
+    local tmpdir interfaces ip iface
+    local tmpdir="$HOME/.local/share/temp/extip"
+    if [ -d "$tmpdir" ]; then
+    mkdir -p "$tmpdir"
+    local interfaces
+    interfaces=$(ip -o link show | awk -F': ' '{print $2}' | grep -v lo)
 
-    if [ -d $HOME/.local/share/temp/extip ]; then
-        interfaces=$(ip -o link show | awk -F': ' '{print $2}' | grep -v lo)
-        cat "$tmpdir"/*.out | grep -v "Failed" | sort
+    set +m
+    for iface in $interfaces; do
+        {
+            local ip
+            ip=$(curl --silent --max-time 5 --interface "$iface" icanhazip.com 2>/dev/null || echo "Failed")
+            echo "$ip" > "$tmpdir/$iface.out"
+        } &
+    done
+    wait
+    set -m
 
-        for iface in $interfaces; do
-            {
-                ip=$(curl --silent --max-time 5 --interface "$iface" icanhazip.com || echo "Failed")
-                echo "$ip" > "$tmpdir/$iface.out"
-            } &> /dev/null &
-        done
-    else
-        mkdir -p $tmpdir > /dev/null
-        interfaces=$(ip -o link show | awk -F': ' '{print $2}' | grep -v lo)
-
-        set +m
-
-        for iface in $interfaces; do
-            {
-                ip=$(curl --silent --max-time 5 --interface "$iface" icanhazip.com || echo "Failed")
-                echo "$ip" > "$tmpdir/$iface.out"
-            } &> /dev/null &
-        done
-
-        wait
-
-        cat "$tmpdir"/*.out | grep -v "Failed" | sort
-    fi
+    grep -v "Failed" "$tmpdir"/*.out | sort
 }
 localip() {
     ip addr show |
@@ -142,7 +144,7 @@ wtfis() { curl "https://cheat.sh/$*"; }
 serve() { local p=${1:-8000}; echo "📡 Serving on http://localhost:$p"; python3 -m http.server "$p"; }
 gqp() {
     git add -A
-    git commit -m "${1:-Quick commit}"
+    git commit -m "${1:-WIP: $(date '+%Y-%m-%d %H:%M')}"
     git push
 }
 
@@ -164,7 +166,7 @@ __git_complete gb _git_branch
 if [ -d "$HOME/.cache/oh-my-posh/" ]; then
     eval "$(oh-my-posh init bash --config "$HOME/.cache/oh-my-posh/themes/catppuccin.omp.json")"
 else
-    export PROMPT_COMMAND='PS1_CMD1=$(tty); PS1_CMD2=$(localip); history -a; history -n'
+    export PROMPT_COMMAND='PS1_CMD1=$(tty) [[ -z "$_CACHED_IP" ]] && _CACHED_IP=$(localip) PS1_CMD2=$_CACHED_IP history -a; history -n'
     export PS1='\[\e[90m\][\!]\[\e[0m\] \[\e[36m\]\T\[\e[0m\] \[\e[36m\]\d\[\e[0m\] \[\e[90m\][\[\e[38;5;32m\]\u@\H\[\e[90m\]:\[\e[0m\]${PS1_CMD1} \[\e[38;5;47m\]${PS1_CMD2}\[\e[90m\]]\[\e[0m\] \w\n\$ '
 fi
 
