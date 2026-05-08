@@ -1,7 +1,6 @@
 # Not interactive, end early.
 [[ $- == *i* ]] || return
 
-
 ########################################
 # Bash Options
 ########################################
@@ -14,7 +13,6 @@ shopt -s histappend                 # Append to history, don't overwrite
 export HISTSIZE=10000
 export HISTFILESIZE=20000
 export HISTCONTROL=ignoredups:erasedups
-export PROMPT_COMMAND='history -a; history -n;'"$PROMPT_COMMAND"
 
 ########################################
 # Key Bindings
@@ -31,11 +29,13 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
-. $HOME/.deno/env
+[ -f "$HOME/.deno/env" ] && . "$HOME/.deno/env"
 command -v zoxide >/dev/null && eval "$(zoxide init bash)"
 command -v fzf >/dev/null && eval "$(fzf --bash)"
 
-export PATH="$HOME/.local/bin:"$PATH
+for dir in "$HOME"/.local/*/bin; do
+  [ -d "$dir" ] && export PATH="$dir:$PATH"
+done
 export PATH="$HOME/.local/*/bin:"$PATH
 export PATH="$HOME/.bun/bin:$PATH"
 ########################################
@@ -51,12 +51,18 @@ alias reload='source ~/.bashrc'
 alias df='df -h'
 alias du='du -sh'
 alias g='git'
+alias ga='git add'
+alias gd='git diff'
+alias gl='git log --oneline --graph --decorate'
 alias gs='git status -sb'
 alias gco='git checkout'
 alias gc='git commit'
 alias gp='git push'
 alias gpl='git pull'
 alias gb='git branch'
+alias br='bun run'
+alias bi='bun install'
+alias bx='bunx'
 
 # eza instead of ls (if available)
 if command -v eza >/dev/null; then
@@ -131,11 +137,11 @@ extract() {
 }
 calc() { [ "$1" ] && echo "scale=6; $*" | bc -l || echo "Usage: calc <expr>"; }
 histg() { history | grep --color=auto -i "$*"; }
-wiki() { [ "$1" ] && lynx "https://wiki.archlinux.org/index.php?search=$*" || echo "Usage: wiki <term>"; }
+wiki() { [ "$1" ] && ${BROWSER:-w3m} "https://wiki.archlinux.org/?search=$*" || echo "Usage: wiki <term>"; }
 wtfis() { curl "https://cheat.sh/$*"; }
 serve() { local p=${1:-8000}; echo "📡 Serving on http://localhost:$p"; python3 -m http.server "$p"; }
 gqp() {
-    git add .
+    git add -A
     git commit -m "${1:-Quick commit}"
     git push
 }
@@ -158,7 +164,7 @@ __git_complete gb _git_branch
 if [ -d "$HOME/.cache/oh-my-posh/" ]; then
     eval "$(oh-my-posh init bash --config "$HOME/.cache/oh-my-posh/themes/catppuccin.omp.json")"
 else
-    export PROMPT_COMMAND='PS1_CMD1=$(tty); PS1_CMD2=$(localip)'
+    export PROMPT_COMMAND='PS1_CMD1=$(tty); PS1_CMD2=$(localip); history -a; history -n'
     export PS1='\[\e[90m\][\!]\[\e[0m\] \[\e[36m\]\T\[\e[0m\] \[\e[36m\]\d\[\e[0m\] \[\e[90m\][\[\e[38;5;32m\]\u@\H\[\e[90m\]:\[\e[0m\]${PS1_CMD1} \[\e[38;5;47m\]${PS1_CMD2}\[\e[90m\]]\[\e[0m\] \w\n\$ '
 fi
 
