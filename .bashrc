@@ -66,7 +66,7 @@ alias mkdir='mkdir -pv'
 alias rm='rm -i'
 alias mv='mv -i'
 alias cp='cp -i'
-alias reload='source ~/.bash_profile'
+alias reload='source ~/.bashrc'
 alias df='df -h'
 alias du='du -sh'
 
