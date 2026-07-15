@@ -12,6 +12,7 @@ OMP_THEME="catppuccin_macchiato.omp.json"
 ########################################
 shopt -s cdspell dirspell   # Correct minor cd/dir typos
 shopt -s histappend         # Append to history, don't overwrite
+shopt -s checkwinsize
 
 ########################################
 # History Configuration
