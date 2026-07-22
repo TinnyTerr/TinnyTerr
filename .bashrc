@@ -93,7 +93,7 @@ alias here='${EDITOR:-code} .'
 # eza instead of ls (if available)
 if command -v eza >/dev/null; then
   alias la="eza -Als type --git -T --hyperlink --header -L 2 -I node_modules"
-  alias ls="eza -Als type --group-directories-first --icons"
+  alias ls="eza -Als type --group-directories-first --icons always"
 fi
 
 ########################################
