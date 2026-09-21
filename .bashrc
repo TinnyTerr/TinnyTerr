@@ -32,6 +32,8 @@ bind '"\C-W": backward-delete-word'
 # Path Additions
 ########################################
 
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv bash)"
+
 # Lazy load NVM — only initialises when you first call nvm/node/npm/npx
 export NVM_DIR="$HOME/.nvm"
 _nvm_lazy() {
