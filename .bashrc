@@ -1,33 +1,3 @@
-# Not interactive, end early.
-[[ $- == *i* ]] || return
-
-########################################
-# Theme
-########################################
-# Change this to switch oh-my-posh themes.
-OMP_THEME="catppuccin_macchiato.omp.json"
-
-########################################
-# Bash Options
-########################################
-shopt -s cdspell dirspell   # Correct minor cd/dir typos
-shopt -s histappend         # Append to history, don't overwrite
-shopt -s checkwinsize
-
-########################################
-# History Configuration
-########################################
-export HISTSIZE=10000
-export HISTFILESIZE=20000
-export HISTCONTROL=ignoredups:erasedups
-
-########################################
-# Key Bindings
-########################################
-bind '"\e[A": history-search-backward'
-bind '"\e[B": history-search-forward'
-bind '"\C-W": backward-delete-word'
-
 ########################################
 # Path Additions
 ########################################
@@ -97,6 +67,36 @@ if command -v eza >/dev/null; then
   alias la="eza -Als type --git -T --hyperlink --header -L 2 -I node_modules"
   alias ls="eza -Als type --group-directories-first --icons always"
 fi
+
+# Not interactive, end early.
+[[ $- == *i* ]] || return
+
+########################################
+# Theme
+########################################
+# Change this to switch oh-my-posh themes.
+OMP_THEME="catppuccin_macchiato.omp.json"
+
+########################################
+# Bash Options
+########################################
+shopt -s cdspell dirspell   # Correct minor cd/dir typos
+shopt -s histappend         # Append to history, don't overwrite
+shopt -s checkwinsize
+
+########################################
+# History Configuration
+########################################
+export HISTSIZE=10000
+export HISTFILESIZE=20000
+export HISTCONTROL=ignoredups:erasedups
+
+########################################
+# Key Bindings
+########################################
+bind '"\e[A": history-search-backward'
+bind '"\e[B": history-search-forward'
+bind '"\C-W": backward-delete-word'
 
 ########################################
 # Functions
